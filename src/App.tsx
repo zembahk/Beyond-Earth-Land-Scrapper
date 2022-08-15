@@ -11,13 +11,20 @@ function App() {
   const [nftList, setNftList] = useState<JSON[]>()
   const [lands, setLands] = useState<any[]>()
   
+  window.ethereum.on('accountsChanged', function (accounts: React.SetStateAction<ethers.BigNumber[] | undefined>[]) {
+    setAddr()
+    setUserAddressBalance(undefined)
+    setNftList(undefined)
+    setLands(undefined)
+  })
+
   useEffect(() => {
     web3()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   const web3 = () => {
-    if (!window.ethereum) {alert('use ethereum browser'); return}
+    if (!window.ethereum) { alert('use ethereum browser'); return }
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     setWeb3Pro(provider)
   }
@@ -30,7 +37,7 @@ function App() {
 
   const setBal = async () => {
     if (!userAddress) { setAddr(); return }
-    const balance = await web3Pro!.getBalance('ethers.eth');
+    const balance = await web3Pro!.getBalance(userAddress.toString());
     if (!balance) { console.log('Balance Error'); return }
     setUserAddressBalance(ethers.utils.formatEther(balance))
   }
@@ -49,13 +56,16 @@ function App() {
     };
     const fetchUrl = 'https://deep-index.moralis.io/api/v2/' + 
       userAddress + '/nft/' + NFT_CONTRACT + '?chain=eth&format=decimal'
-    return await fetch(fetchUrl, options)
+    const result = await fetch(fetchUrl, options)
       .then(response => response.json())
       .then(response => { 
+        if (!response.result){} else {
         setNftList(response.result) 
         console.log('List Set')
+        }
       })
       .catch(err => console.error(err));
+      return result
   }
 
   const showNFTs = async () => {
@@ -91,7 +101,7 @@ function App() {
       div.innerHTML = land
       nftDiv?.appendChild(div)
     })
-    return <div>{ lands !== [] ? 'Lands Loaded' : 'No Data' } </div>
+    return <div>{ lands.length !== 0 ? 'Lands Loaded' : 'No Data' } </div>
   }
 
   return (
@@ -100,9 +110,9 @@ function App() {
         <><div id="nfts" className="nft-list"></div>
           {userAddress ? 'Beyond Earth Online Land NFT Scrapper' : 'Must be logged in'}
           <p></p>
-          <button onClick={setAddr} hidden={userAddress !== undefined}>Connect Wallet</button>
+          <button onClick={setAddr} hidden={userAddress !== undefined }>Connect Wallet</button>
           <button onClick={getNFTs} hidden={nftList !== undefined || !userAddress}>Load NFTs List</button>
-          <button onClick={showNFTs} hidden={lands !== undefined || lands === [] || !nftList}>Show NFTs</button>
+          <button onClick={showNFTs} hidden={lands !== undefined || !nftList}>Show NFTs</button>
           <button className='eth-btn' onClick={setBal} hidden={!userAddress || userAddressBalance !== undefined}>Eth Balance</button>
           <div hidden={!userAddressBalance}>
             Eth {userAddressBalance}
