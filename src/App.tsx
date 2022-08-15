@@ -10,16 +10,15 @@ function App() {
   const [userAddressBalance, setUserAddressBalance] = useState<string>()
   const [nftList, setNftList] = useState<JSON[]>()
   const [lands, setLands] = useState<any[]>()
-  
-  window.ethereum.on('accountsChanged', function (accounts: React.SetStateAction<ethers.BigNumber[] | undefined>[]) {
-    setAddr()
-    setUserAddressBalance(undefined)
-    setNftList(undefined)
-    setLands(undefined)
-  })
+
 
   useEffect(() => {
-    web3()
+    try{ window.ethereum.on('accountsChanged', function () {
+      setAddr()
+      setUserAddressBalance(undefined)
+      setNftList(undefined)
+      setLands(undefined)
+    })} catch (e) {return}
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
