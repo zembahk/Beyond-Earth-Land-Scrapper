@@ -31,7 +31,7 @@ function App() {
   const setBal = async () => {
     if (!userAddress) { setAddr(); return }
     const balance = await web3Pro!.getBalance('ethers.eth');
-    if (!balance) { console.log('balance error'); return }
+    if (!balance) { console.log('Balance Error'); return }
     setUserAddressBalance(ethers.utils.formatEther(balance))
   }
 
@@ -53,7 +53,7 @@ function App() {
       .then(response => response.json())
       .then(response => { 
         setNftList(response.result) 
-        console.log('list set')
+        console.log('List Set')
       })
       .catch(err => console.error(err));
   }
@@ -77,12 +77,11 @@ function App() {
       })
       lands.push(array)
     })
-    console.log(lands)
+    console.log(userAddress, nftList)
     setLands(lands)
   }
 
   const Land = () => {
-    console.log(userAddress, nftList, lands)
     if (!nftList) {return <div>{ userAddress ? 'No List Loaded' : 'List Not Load' } </div>}
     if (!lands){return <div>{ nftList ? 'User Land List Loaded' : 'No Data Found' } </div>}
     const nftDiv = document.getElementById("nfts")
