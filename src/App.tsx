@@ -77,20 +77,22 @@ function App() {
       })
       lands.push(array)
     })
+    console.log(lands)
     setLands(lands)
   }
 
   const Land = () => {
-    if (!nftList) {return <div>{ userAddress ? 'No Land Data' : '' } </div>}
-    if (!lands){return <div>{ nftList ? 'User Land List Loaded' : '' } </div>}
-    const nftDiv = document.getElementById("nfts");
+    console.log(userAddress, nftList, lands)
+    if (!nftList) {return <div>{ userAddress ? 'No List Loaded' : 'List Not Load' } </div>}
+    if (!lands){return <div>{ nftList ? 'User Land List Loaded' : 'No Data Found' } </div>}
+    const nftDiv = document.getElementById("nfts")
     nftDiv!.innerHTML = ''
     lands.forEach((land) => {
-      const p = document.createElement("p");
+      const p = document.createElement("p")
       p.innerHTML = land
-      nftDiv?.appendChild(p);
+      nftDiv?.appendChild(p)
     })
-    return <div>Lands Loaded</div>
+    return <div>{ lands !== [] ? 'Lands Loaded' : 'No Data' } </div>
   }
 
   return (
@@ -99,14 +101,13 @@ function App() {
         <><div id="nfts" className="nft-list"></div>
           {userAddress ? 'Beyond Earth Online Land NFT Scrapper' : 'Must be logged in'}
           <p></p>
-          <br></br>
+          <button onClick={setAddr} hidden={userAddress !== undefined}>Connect Wallet</button>
+          <button onClick={getNFTs} hidden={nftList !== undefined || !userAddress}>Load NFTs List</button>
+          <button onClick={showNFTs} hidden={lands !== undefined || lands === [] || !nftList}>Show NFTs</button>
+          <button className='eth-btn' onClick={setBal} hidden={!userAddress || userAddressBalance !== undefined}>Eth Balance</button>
           <div hidden={!userAddressBalance}>
             Eth {userAddressBalance}
           </div>
-          <button onClick={setAddr} hidden={userAddress !== undefined}>Connect Wallet</button>
-          <button onClick={getNFTs} hidden={nftList !== undefined || !userAddress}>Load NFTs List</button>
-          <button onClick={showNFTs} hidden={lands !== undefined || !nftList}>Show NFTs</button>
-          <button className='eth-btn' onClick={setBal} hidden={!userAddress || userAddressBalance !== undefined}>Eth Balance</button>
           <img src={logo} className="App-logo" alt="logo" />        
           <Land />
         </>
