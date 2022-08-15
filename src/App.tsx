@@ -17,12 +17,14 @@ function App() {
   }, [])
   
   const web3 = () => {
+    if (!window.ethereum) {alert('use ethereum browser'); return}
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     setWeb3Pro(provider)
   }
 
   const setAddr = async () => {
-    const accounts = await web3Pro!.send("eth_requestAccounts", []);
+    if (!web3Pro) { web3(); return }
+    const accounts = await web3Pro.send("eth_requestAccounts", []);
     setUserAddress(accounts)
   }
 
@@ -78,37 +80,37 @@ function App() {
     setLands(lands)
   }
 
-  const land = () => {
-    if (!lands){return <div></div>}
+  const Land = () => {
+    if (!nftList) {return <div>{ userAddress ? 'No Land Data' : '' } </div>}
+    if (!lands){return <div>{ nftList ? 'User Land List Loaded' : '' } </div>}
     const nftDiv = document.getElementById("nfts");
     nftDiv!.innerHTML = ''
     lands.forEach((land) => {
       const p = document.createElement("p");
-      var mapped = land.map( (_val: any) => {
-        _val += '<br>'
-        return _val
-      })
-      p.innerHTML = mapped
+      p.innerHTML = land
       nftDiv?.appendChild(p);
     })
+    return <div>Lands Loaded</div>
   }
 
   return (
     <div className="App">
         <header className="App-header">
         <><div id="nfts" className="nft-list"></div>
-          <button onClick={setAddr} hidden={userAddress !== undefined}>Login</button>
-          <button onClick={setBal} hidden={!userAddress || userAddressBalance !== undefined}>Eth Balance</button>
-          <button onClick={getNFTs} hidden={nftList !== undefined || !userAddress}>Load NFTs List</button>
-          <button onClick={showNFTs} hidden={lands !== undefined || !nftList}>Show BEO Land NFTs</button>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p></p>
           {userAddress ? 'Beyond Earth Online Land NFT Scrapper' : 'Must be logged in'}
+          <p></p>
           <br></br>
-          {userAddressBalance}
+          <div hidden={!userAddressBalance}>
+            Eth {userAddressBalance}
+          </div>
+          <button onClick={setAddr} hidden={userAddress !== undefined}>Connect Wallet</button>
+          <button onClick={getNFTs} hidden={nftList !== undefined || !userAddress}>Load NFTs List</button>
+          <button onClick={showNFTs} hidden={lands !== undefined || !nftList}>Show NFTs</button>
+          <button className='eth-btn' onClick={setBal} hidden={!userAddress || userAddressBalance !== undefined}>Eth Balance</button>
+          <img src={logo} className="App-logo" alt="logo" />        
+          <Land />
         </>
         </header>
-        {land()}
     </div>
   );
 }

@@ -11,6 +11,35 @@ body{
   background-color: #282c34;
 }
 
+button {
+  background-image: url("BEOicon.png");
+  background-position:center;
+  background-size:cover;
+  background-color: black;
+  color: rgb(0, 224, 135);
+  padding: 5%;
+  height: 350px;
+  width: 350px;
+  font-size: 48px;
+  text-shadow: -2px 0 black, 0 3px black, 2px 0 black, 0 -1px black;
+}
+
+.eth-btn {
+  background-image: none;
+  background-position:center;
+  background-size:cover;
+  color: rgb(11, 51, 226);
+  padding: 1%;
+  height: auto;
+  width: auto;
+  font-size: 36px;
+  text-shadow: -2px 0 black, 0 3px black, 2px 0 black, 0 -1px black;
+}
+
+button:hover {
+  background-color: rgb(99, 99, 99);
+}
+
 .App {
   text-align: center;
 }
@@ -30,7 +59,7 @@ body{
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction:column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
