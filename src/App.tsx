@@ -87,9 +87,9 @@ function App() {
     const nftDiv = document.getElementById("nfts")
     nftDiv!.innerHTML = ''
     lands.forEach((land) => {
-      const p = document.createElement("p")
-      p.innerHTML = land
-      nftDiv?.appendChild(p)
+      const div = document.createElement("div")
+      div.innerHTML = land
+      nftDiv?.appendChild(div)
     })
     return <div>{ lands !== [] ? 'Lands Loaded' : 'No Data' } </div>
   }
